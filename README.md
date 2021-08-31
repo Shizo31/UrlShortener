@@ -17,3 +17,7 @@ express: 4.17.1
 Discord: Shizofreniya.-#9797
 
 Telegram: @Shizofreniya12
+
+**TO DO**
+Uses: Fastify,PostgreSQL
+Create discord bot.
