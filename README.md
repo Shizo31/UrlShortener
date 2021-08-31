@@ -21,4 +21,5 @@ Telegram: @Shizofreniya12
 **🤠 TO DO**
 
 Uses: Fastify,PostgreSQL
+
 Create discord bot.
