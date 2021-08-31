@@ -5,7 +5,7 @@
 **⚙️ Start Commands for console**
 ```sh
 npm i
-node index.js
+node src/index.js
 ```
 **🛠️ Modules Uses**
 ```sh
