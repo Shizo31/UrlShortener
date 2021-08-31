@@ -11,7 +11,6 @@ node index.js
 ```sh
 mongoose: 6.0.3
 express: 4.17.1
-typescript: 4.2.4
 ```
 **📍 Contact** 
 
