@@ -2,23 +2,24 @@ const express = require('express');
 const mongo = require('mongoose');
 const links = require("./data/links");
 const app = express();
+
 mongo.connect('mongo url', { useNewUrlParser: true, useUnifiedTopology: true });
 mongo.connection.on('connected', () => {
-    console.log('[ DATABASE ] Успешное подключение к базе-данных!');
+    console.log('Успешное подключение к базе-данных!');
 });
 
 app.get('/', (req, res) => {
-    res.send('api worked');
+    res.send('Api started port 3000');
 });
 
 app.get("/:path", async (req, res) => {
     const path = req.params.path;
-    let datebase = await links.findOne({ endpoint: path });
-    if (datebase) {
-        res.redirect(datebase.link);
-
+    const data = await links.findOne({ endpoint: path });
+    if (data) {
+        res.redirect(data.link);
     } else {
       res.send('Нету такого редиректа');
     };
 });
+
 app.listen(3000);
