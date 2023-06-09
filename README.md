@@ -5,12 +5,8 @@
 **⚙️ Start Commands for console**
 ```sh
 npm i
-node src/index.js
+npm run start 
 ```
 
-**🛠️ Modules Uses**
-```sh
-mongoose: 6.0.3
-express: 4.17.1
-```
+
 

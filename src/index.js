@@ -1,25 +1,63 @@
 const express = require('express');
-const mongo = require('mongoose');
-const links = require("./data/links");
 const app = express();
+const RediDB = require('redi.db.js');
+require('dotenv').config()
 
-mongo.connect('mongo url', { useNewUrlParser: true, useUnifiedTopology: true });
-mongo.connection.on('connected', () => {
-    console.log('Успешное подключение к базе-данных!');
+const db = new RediDB({
+    login: process.env.LOGIN,
+    password: process.env.PASSWORD,
+    ip: process.env.IP,  
+    port: process.env.DBPORT,
+    websocket: true,
+    useSSL: false, 
 });
 
-app.get('/', (req, res) => {
-    res.send('Api started port 3000');
+db.on('connected', () => {
+    console.log('Successful connection to rediDB!');
 });
 
-app.get("/:path", async (req, res) => {
+db.on('disconnect', () => {
+    console.log('Disconnected!');
+});
+
+db.on('error', err => {
+    console.log(`Handled error: ${err}`);
+});
+
+const shortColection = db.create('ShortUrlDB', 'urlsCollection');
+
+app.use(require('express-body'));
+
+app.get("/:path", async (req,res) => {
+
     const path = req.params.path;
-    const data = await links.findOne({ endpoint: path });
-    if (data) {
-        res.redirect(data.link);
-    } else {
-      res.send('Нету такого редиректа');
-    };
+
+    const UrlData = await shortColection.searchOne({ path });
+
+    if (!UrlData) return;
+
+    return res.redirect(UrlData.redirect);
 });
 
-app.listen(3000);
+app.post("/create", async (req, res) => {
+
+    const { path, redirect } = req.body;
+
+    if (!path && !redirect) {
+       return res.json({ message: 'You didn`t specify the parameters.', status: 400});
+    };
+
+    const UrlData = await shortColection.searchOrCreate({ path }, {path, redirect});
+
+    if (UrlData.created === false) {
+        return res.json({ message: 'Such an abbreviated link already exists.', status: 400});
+    };
+
+    return res.json(`The shortened link was successfully created /${path}`);
+});
+
+app.listen(process.env.PORT, function(err){
+    if (err) {
+        return console.log(`Failed to start the server: ${err}`) 
+    } else return console.log(`The server is running on the port ${process.env.PORT}`);
+});

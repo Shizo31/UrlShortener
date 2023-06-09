@@ -1,0 +1,17 @@
+{
+  "name": "UrlShortener",
+  "version": "1.0.0",
+  "description": "Just a link shortener",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "shizofren1ya",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "express-body": "^1.0.6",
+    "redi.db.js": "^4.1.2"
+  }
+}
